@@ -1,0 +1,47 @@
+name: unitbot
+version: '0.1.0.0'
+category: Web
+author: Author name here
+maintainer: example@example.com
+copyright: 2018 Author name here
+license: BSD3
+github: githubuser/unitbot
+extra-source-files:
+- README.md
+library:
+  source-dirs: src
+  exposed-modules:
+  - Lib
+  dependencies:
+  - base >=4.7 && <5
+  - aeson
+  - servant-server
+  - wai
+  - warp
+  - text
+executables:
+  unitbot-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - base
+    - unitbot
+tests:
+  unitbot-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - base
+    - unitbot
+    - hspec
+    - hspec-wai
+    - hspec-wai-json
+    - aeson
