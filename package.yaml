@@ -8,17 +8,23 @@ license: BSD3
 github: githubuser/unitbot
 extra-source-files:
 - README.md
+
 library:
   source-dirs: src
-  exposed-modules:
-  - Lib
   dependencies:
   - base >=4.7 && <5
   - aeson
   - servant-server
   - wai
+  - wai-logger
+  - wai-extra
   - warp
   - text
+  - unordered-containers
+  - wreq
+  - lens
+  - transformers
+
 executables:
   unitbot-exe:
     main: Main.hs

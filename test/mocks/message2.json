@@ -1,0 +1,19 @@
+{
+  "token": "E1E1CVdDtDDGp7eQPe4NjLoX",
+  "team_id": "T5WC2SVBN",
+  "api_app_id": "AEASEPB0Q",
+  "event": {
+    "type": "message",
+    "user": "U5WAMTADQ",
+    "text": "a",
+    "client_msg_id": "c5c47e84-b1aa-4567-a7b7-057196c546f3",
+    "ts": "1543211716.002900",
+    "channel": "CEBQXG9MK",
+    "event_ts": "1543211716.002900",
+    "channel_type": "channel"
+  },
+  "type": "event_callback",
+  "event_id": "EvED2RSZFY",
+  "event_time": 1543211716,
+  "authed_users": ["UEB0YSP1P"]
+}
