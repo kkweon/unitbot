@@ -9,6 +9,7 @@ import Data.Aeson
   , ToJSON
   , Value(Object)
   , (.:)
+  , (.:?)
   , constructorTagModifier
   , fieldLabelModifier
   , parseJSON
@@ -53,10 +54,11 @@ data SlackMessageEvent = SlackMessageEvent
   , slackMessageText :: Text
   , slackMessageClientMsgId :: Text
   , slackMessageTs :: Text
+  , slackMessageThreadTs :: Maybe Text
   , slackMessageChannel :: Text
   , slackMessageEventTs :: Text
   , slackMessageChannelType :: Text
-  }
+  } deriving (Show, Eq)
 
 instance FromJSON SlackMessageEvent where
   parseJSON =
@@ -67,6 +69,7 @@ instance FromJSON SlackMessageEvent where
       v .: "text" <*>
       v .: "client_msg_id" <*>
       v .: "ts" <*>
+      v .:? "thread_ts" <*>
       v .: "channel" <*>
       v .: "event_ts" <*>
       v .: "channel_type"
