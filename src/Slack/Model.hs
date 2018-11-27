@@ -10,11 +10,11 @@ import Data.Aeson
   , Value(Object)
   , (.:)
   , (.:?)
-  , constructorTagModifier
   , fieldLabelModifier
   , parseJSON
   , withObject
   )
+import Control.Monad (mzero)
 import Data.Aeson.TH (defaultOptions, deriveJSON)
 import qualified Data.HashMap.Strict as HML
 import Data.Text (Text)
@@ -45,6 +45,7 @@ instance FromJSON SlackRequest where
            o .: "authed_users" <*>
            o .: "event_id" <*>
            o .: "event_time"
+  parseJSON _ = mzero
 
 
 -- | Message Event Object sent by Slack
@@ -88,6 +89,7 @@ data SlackBotMessage = SlackBotMessage
   { slackBot_token :: Text
   , slackBot_channel :: Text
   , slackBot_text :: Text
+  , slackBot_thread_ts :: Maybe Text
   }
 
 $(deriveJSON

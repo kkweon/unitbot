@@ -6,7 +6,6 @@ module AppSpec
 import App (app)
 import Test.Hspec
 import Test.Hspec.Wai
-import Test.Hspec.Wai.JSON
 
 spec :: Spec
 spec =

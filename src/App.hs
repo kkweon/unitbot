@@ -13,7 +13,6 @@ import Control.Concurrent (forkIO)
 import Control.Lens ((.~), (^.))
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson
-import Data.Aeson.TH
 import Data.Function ((&))
 import Data.Maybe (fromMaybe)
 import Data.Text
@@ -25,15 +24,14 @@ import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import Servant
 import System.Environment (getEnv, lookupEnv)
 
+import qualified Data.Quantities as Quantities
 import qualified Network.Wreq as Wreq
 
 import Slack.Model
   ( SlackBotMessage(..)
   , SlackRequest(..)
   , SlackResponse(..)
-  , slackMessageChannel
-  , slackMessageText
-  , slackMessageUser
+  , SlackMessageEvent(..)
   )
 
 type API
@@ -69,17 +67,26 @@ handleSlackRequest _ SlackRequest {slackChallenge} =
 
 sendMessage :: String -> SlackRequest -> IO ()
 sendMessage token SlackMessage {..} = do
-  let slackChannel = slackMessageChannel slackEvent
   let slackMessage = slackMessageText slackEvent
-  let slackBotMessage = SlackBotMessage slackToken slackChannel slackMessage
-  let opts =
-        Wreq.defaults &
-        Wreq.header "Authorization" .~ [encodeUtf8 ("Bearer " <> pack token)]
-  response <-
-    Wreq.postWith
-      opts
-      "https://slack.com/api/chat.postMessage"
-      (toJSON slackBotMessage)
-  print $ "Sent a message: " <> encode (toJSON slackBotMessage)
-  print $ "Received a response: " <> (response ^. Wreq.responseBody)
+
+  case Quantities.fromString (unpack slackMessage) of
+    Right quantity -> _sendMessage quantity
+    _ -> return ()
+
+  where
+    _sendMessage :: (Eq a, Ord a, Show a) => Quantities.Quantity a -> IO ()
+    _sendMessage quantity = do
+          let slackChannel = slackMessageChannel slackEvent
+          let slackThreadTs = slackMessageThreadTs slackEvent
+          let slackBotMessage = SlackBotMessage slackToken slackChannel (pack . show $ quantity) slackThreadTs
+          let opts =
+                Wreq.defaults &
+                Wreq.header "Authorization" .~ [encodeUtf8 ("Bearer " <> pack token)]
+          response <-
+            Wreq.postWith
+              opts
+              "https://slack.com/api/chat.postMessage"
+              (toJSON slackBotMessage)
+          print $ "Sent a message: " <> encode (toJSON slackBotMessage)
+          print $ "Received a response: " <> (response ^. Wreq.responseBody)
 sendMessage _ _ = return ()

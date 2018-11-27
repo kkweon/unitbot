@@ -1,0 +1,21 @@
+{
+  "token": "E1E1CVdDtDDGp7eQPe4NjLoX",
+  "team_id": "T5WC2SVBN",
+  "api_app_id": "AEASEPB0Q",
+  "event": {
+    "type": "message",
+    "user": "U5WAMTADQ",
+    "text": "5 quart => liter",
+    "client_msg_id": "769e7480-2b3b-4d44-86f5-161c93ff45f8",
+    "thread_ts": "1543296941.000600",
+    "parent_user_id": "U5WAMTADQ",
+    "ts": "1543299553.000900",
+    "channel": "CEBQXG9MK",
+    "event_ts": "1543299553.000900",
+    "channel_type": "channel"
+  },
+  "type": "event_callback",
+  "event_id": "EvEC09PEUQ",
+  "event_time": 1543299553,
+  "authed_users": ["UEB0YSP1P"]
+}
