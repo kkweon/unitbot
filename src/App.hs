@@ -16,6 +16,8 @@ import Data.Aeson
 import Data.Function ((&))
 import Data.Maybe (fromMaybe)
 import Data.Text
+import Conversion (convert)
+import Conversion.Text
 import Data.Text.Encoding (encodeUtf8)
 import Network.Wai
 import Network.Wai.Handler.Warp
@@ -23,9 +25,11 @@ import Network.Wai.Logger (withStdoutLogger)
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import Servant
 import System.Environment (getEnv, lookupEnv)
+import HTMLEntities.Decoder (htmlEncodedText)
 
 import qualified Data.Quantities as Quantities
 import qualified Network.Wreq as Wreq
+import qualified Data.Text.IO as TIO
 
 import Slack.Model
   ( SlackBotMessage(..)
@@ -67,9 +71,9 @@ handleSlackRequest _ SlackRequest {slackChallenge} =
 
 sendMessage :: String -> SlackRequest -> IO ()
 sendMessage token SlackMessage {..} = do
-  let slackMessage = slackMessageText slackEvent
+  let slackMessage = htmlEncodedText . slackMessageText $ slackEvent
 
-  case Quantities.fromString (unpack slackMessage) of
+  case Quantities.fromString (convert slackMessage) of
     Right quantity -> _sendMessage quantity
     _ -> return ()
 
@@ -87,6 +91,6 @@ sendMessage token SlackMessage {..} = do
               opts
               "https://slack.com/api/chat.postMessage"
               (toJSON slackBotMessage)
-          print $ "Sent a message: " <> encode (toJSON slackBotMessage)
-          print $ "Received a response: " <> (response ^. Wreq.responseBody)
+          TIO.putStrLn $ "Sent a message: " <> convert (show slackBotMessage)
+          TIO.putStrLn $ "Received a response: " <> convert (show (response ^. Wreq.responseBody))
 sendMessage _ _ = return ()

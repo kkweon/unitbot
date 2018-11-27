@@ -39,6 +39,9 @@ packages:
 # (e.g., acme-missiles-0.3)
 extra-deps:
 - quantities-0.4.0@sha256:d9682eec40942e405243455a34be7d50a529509d6e38173b6cd6da295cfb1190
+- conversion-1.2.1@sha256:8db4210950736e54be5cd7f7076c19e05d06fb48673eb23638093246a1e7199e
+- conversion-text-1.0.1@sha256:6c93c9a8bd7c58816c89cb6a1d8d47796812fe1366d4c6af852183c6696dda75
+- conversion-bytestring-1.0.1@sha256:273d42b5fae89e38be49f9a871f8dc5665a706fc09027a0971e73becbddfce49
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

@@ -25,6 +25,9 @@ library:
   - lens
   - transformers
   - quantities
+  - html-entities
+  - conversion
+  - conversion-text
 
 executables:
   unitbot-exe:

@@ -90,7 +90,7 @@ data SlackBotMessage = SlackBotMessage
   , slackBot_channel :: Text
   , slackBot_text :: Text
   , slackBot_thread_ts :: Maybe Text
-  }
+  } deriving (Show)
 
 $(deriveJSON
     defaultOptions
