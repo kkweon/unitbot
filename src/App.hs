@@ -11,6 +11,7 @@ module App
 
 import Control.Concurrent (forkIO)
 import Control.Lens ((.~), (^.))
+import Control.Monad (unless)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson
 import Data.Function ((&))
@@ -73,11 +74,16 @@ sendMessage :: String -> SlackRequest -> IO ()
 sendMessage token SlackMessage {..} = do
   let slackMessage = htmlEncodedText . slackMessageText $ slackEvent
 
-  case Quantities.fromString (convert slackMessage) of
-    Right quantity -> _sendMessage quantity
-    _ -> return ()
+  unless (_isConversion $ convert slackMessage) $
+    case Quantities.fromString (convert slackMessage) of
+      Right quantity -> _sendMessage quantity
+      _ -> return ()
 
   where
+    -- "=>" should be contained to be considered that this is a conversion text
+    _isConversion :: Text -> Bool
+    _isConversion s = "=>" `isInfixOf` s
+
     _sendMessage :: (Eq a, Ord a, Show a) => Quantities.Quantity a -> IO ()
     _sendMessage quantity = do
           let slackChannel = slackMessageChannel slackEvent
